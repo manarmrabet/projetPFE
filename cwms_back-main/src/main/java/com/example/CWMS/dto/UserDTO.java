@@ -16,7 +16,7 @@ public class UserDTO {
     private String PasswordHash;
     private String FirstName;
     private String LastName;
-    private  int IsActive;
+    private  Integer IsActive;
     private LocalDateTime CreatedAt;
     private LocalDateTime UpdatedAt;
     private String roleName;

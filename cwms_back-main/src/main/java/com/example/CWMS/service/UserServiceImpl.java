@@ -56,7 +56,9 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
 
         user.setCreatedAt(LocalDateTime.now());
-        user.setIsActive(true); // Activation par défaut
+        if (user.getIsActive() == null) {
+            user.setIsActive(true);
+        } // Activation par défaut
 
         User savedUser = userRepository.save(user);
 
@@ -90,7 +92,10 @@ public class UserServiceImpl implements UserService {
         if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         if (dto.getFirstName() != null) user.setFirstName(dto.getFirstName());
         if (dto.getLastName() != null) user.setLastName(dto.getLastName());
-
+        if (dto.getIsActive() != null) {
+            // Si isActive dans le DTO est un Integer (1 ou 0)
+            user.setIsActive(dto.getIsActive() == 1);
+        }
         // 1. GESTION DU RÔLE
         if (dto.getRoleName() != null && !dto.getRoleName().isEmpty()) {
             roleRepository.findAll().stream()
@@ -115,7 +120,7 @@ public class UserServiceImpl implements UserService {
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-
+        dto.setIsActive(user.getIsActive() != null && user.getIsActive() ? 1 : 0);
         if (user.getRole() != null) {
             dto.setRoleName(user.getRole().getRoleName());
         }
